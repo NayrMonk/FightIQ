@@ -17,6 +17,9 @@ export default function ProfileScreen() {
   const [primaryDiscipline, setPrimaryDiscipline] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
 
+  // Syncs async-loaded server data into locally-editable form fields once it arrives;
+  // there's no render-time source of truth to derive these from since the fields are
+  // user-editable afterward.
   useEffect(() => {
     if (data) {
       setDisplayName(data.display_name ?? "");
@@ -37,7 +40,12 @@ export default function ProfileScreen() {
     return (
       <View className="flex-1 bg-background items-center justify-center px-6">
         <Text className="text-white/70 text-center mb-3">Couldn&apos;t load your profile.</Text>
-        <Pressable onPress={() => refetch()} className="bg-brand-container rounded-lg px-4 py-2">
+        <Pressable
+          onPress={() => refetch()}
+          accessibilityRole="button"
+          accessibilityLabel="Retry"
+          className="bg-brand-container rounded-lg px-4 py-2"
+        >
           <Text className="text-white font-bold uppercase tracking-widest text-xs">Retry</Text>
         </Pressable>
       </View>
@@ -67,6 +75,7 @@ export default function ProfileScreen() {
           onChangeText={setDisplayName}
           className="bg-background border border-white/10 text-white rounded-lg px-4 py-3 mb-4"
           placeholderTextColor="#666"
+          accessibilityLabel="Display name"
         />
 
         <Text className="text-white/60 text-xs uppercase tracking-widest mb-1">Primary Discipline</Text>
@@ -76,6 +85,7 @@ export default function ProfileScreen() {
           placeholder="boxing, mma, muay_thai..."
           className="bg-background border border-white/10 text-white rounded-lg px-4 py-3 mb-4"
           placeholderTextColor="#666"
+          accessibilityLabel="Primary discipline"
         />
 
         <Text className="text-white/60 text-xs uppercase tracking-widest mb-1">Experience Level</Text>
@@ -85,10 +95,14 @@ export default function ProfileScreen() {
           placeholder="beginner, intermediate, advanced"
           className="bg-background border border-white/10 text-white rounded-lg px-4 py-3 mb-2"
           placeholderTextColor="#666"
+          accessibilityLabel="Experience level"
         />
 
         <Pressable
           onPress={handleSave}
+          accessibilityRole="button"
+          accessibilityLabel="Save profile"
+          accessibilityState={{ busy: updateProfile.isPending }}
           className="bg-brand-container rounded-lg py-3 items-center mt-4 active:opacity-80"
         >
           <Text className="text-white font-bold uppercase tracking-widest">
@@ -98,7 +112,22 @@ export default function ProfileScreen() {
       </Card>
       </WidgetBoundary>
 
-      <Pressable onPress={handleLogout} className="items-center py-3">
+      <Pressable
+        onPress={() => router.push("/settings")}
+        accessibilityRole="button"
+        accessibilityLabel="Open settings"
+        className="bg-surface border border-white/10 rounded-lg px-4 py-3 flex-row justify-between items-center mb-4 active:opacity-80"
+      >
+        <Text className="text-white font-semibold">Settings</Text>
+        <Text className="text-white/40">›</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={handleLogout}
+        accessibilityRole="button"
+        accessibilityLabel="Log out"
+        className="items-center py-3"
+      >
         <Text className="text-brand font-semibold">Log Out</Text>
       </Pressable>
     </ScrollView>

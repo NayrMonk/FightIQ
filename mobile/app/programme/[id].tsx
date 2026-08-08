@@ -30,6 +30,8 @@ export default function ProgrammeDetailScreen() {
                 <Pressable
                   key={scheduled.id}
                   onPress={() => router.push(`/session/${scheduled.session_template.id}`)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${DAY_LABELS[scheduled.day_of_week]}: ${scheduled.session_template.name}`}
                 >
                   <Card className="mb-2 flex-row justify-between items-center">
                     <View className="flex-1">

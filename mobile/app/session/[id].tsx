@@ -64,6 +64,9 @@ export default function SessionPreviewScreen() {
             <Pressable
               onPress={handleStart}
               disabled={starting}
+              accessibilityRole="button"
+              accessibilityLabel="Start session"
+              accessibilityState={{ disabled: starting, busy: starting }}
               className="bg-brand-container rounded-lg py-4 items-center active:opacity-80"
             >
               <Text className="text-white font-bold uppercase tracking-widest">

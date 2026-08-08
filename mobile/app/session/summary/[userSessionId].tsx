@@ -68,6 +68,7 @@ export default function SessionSummaryScreen() {
             placeholder="7"
             placeholderTextColor="#666"
             className="bg-background border border-white/10 text-white rounded-lg px-4 py-3 mb-3"
+            accessibilityLabel="Perceived intensity, 1 to 10"
           />
           <TextInput
             value={notes}
@@ -76,10 +77,14 @@ export default function SessionSummaryScreen() {
             placeholderTextColor="#666"
             multiline
             className="bg-background border border-white/10 text-white rounded-lg px-4 py-3 mb-3"
+            accessibilityLabel="Notes, optional"
           />
           <Pressable
             onPress={handleSaveIntensity}
             disabled={saving || !intensity}
+            accessibilityRole="button"
+            accessibilityLabel="Save"
+            accessibilityState={{ disabled: saving || !intensity, busy: saving }}
             className="bg-brand-container rounded-lg py-3 items-center active:opacity-80"
           >
             <Text className="text-white font-bold uppercase tracking-widest">
@@ -88,7 +93,12 @@ export default function SessionSummaryScreen() {
           </Pressable>
         </Card>
 
-        <Pressable onPress={() => router.replace("/")} className="items-center py-3">
+        <Pressable
+          onPress={() => router.replace("/")}
+          accessibilityRole="button"
+          accessibilityLabel="Back to home"
+          className="items-center py-3"
+        >
           <Text className="text-white/60">Back to Home</Text>
         </Pressable>
       </ScrollView>

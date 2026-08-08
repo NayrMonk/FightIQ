@@ -32,7 +32,12 @@ export default function HistoryScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <Pressable onPress={() => router.push("/analytics")} className="mx-4 mt-4">
+      <Pressable
+        onPress={() => router.push("/analytics")}
+        accessibilityRole="button"
+        accessibilityLabel="View analytics"
+        className="mx-4 mt-4"
+      >
         <Card className="flex-row justify-between items-center">
           <Text className="text-white font-semibold">View Analytics</Text>
           <Text className="text-mint">→</Text>
@@ -48,7 +53,12 @@ export default function HistoryScreen() {
       ) : isError ? (
         <View className="items-center py-10 px-6">
           <Text className="text-white/70 text-center mb-3">Couldn&apos;t load history.</Text>
-          <Pressable onPress={() => refetch()} className="bg-brand-container rounded-lg px-4 py-2">
+          <Pressable
+            onPress={() => refetch()}
+            accessibilityRole="button"
+            accessibilityLabel="Retry"
+            className="bg-brand-container rounded-lg px-4 py-2"
+          >
             <Text className="text-white font-bold uppercase tracking-widest text-xs">Retry</Text>
           </Pressable>
         </View>
