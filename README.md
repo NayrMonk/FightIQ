@@ -288,6 +288,14 @@ cd mobile
 npm test
 ```
 
+
+https://github.com/user-attachments/assets/c3913ffb-d64a-4e1f-acbf-2c7baa29b6d6
+
+
+
+https://github.com/user-attachments/assets/6c019474-a59b-404d-bb2f-37c5798483fb
+
+
 ---
 
 ## Roadmap
