@@ -43,6 +43,18 @@ def get_today_session(
     return session_row
 
 
+@router.get("/{user_session_id}", response_model=UserSessionDetailResponse)
+def get_session(
+    user_session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    user_session = _load(db.query(UserSession).filter(UserSession.id == user_session_id)).first()
+    if not user_session or user_session.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
+    return user_session
+
+
 @router.post("", response_model=UserSessionResponse, status_code=status.HTTP_201_CREATED)
 def start_session(
     payload: StartSessionRequest,

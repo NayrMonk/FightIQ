@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FightIQ - AI Coach</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131314",
+                        "primary-fixed": "#ffdad9",
+                        "secondary": "#8affc0",
+                        "surface-variant": "#353436",
+                        "on-secondary-fixed": "#002112",
+                        "secondary-fixed": "#4fffb0",
+                        "background": "#131314",
+                        "surface-tint": "#ffb3b3",
+                        "on-tertiary-container": "#2a292c",
+                        "on-surface-variant": "#e6bcbc",
+                        "on-secondary": "#003822",
+                        "primary": "#ffb3b3",
+                        "on-tertiary-fixed-variant": "#474649",
+                        "on-primary-fixed-variant": "#920022",
+                        "on-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#c8c6c8",
+                        "secondary-fixed-dim": "#00e295",
+                        "inverse-on-surface": "#313031",
+                        "on-secondary-fixed-variant": "#005233",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "outline": "#ad8887",
+                        "on-primary-fixed": "#400009",
+                        "primary-container": "#ff5261",
+                        "surface-container-low": "#1c1b1c",
+                        "on-primary-container": "#5b0011",
+                        "surface-container-lowest": "#0e0e0f",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#303032",
+                        "surface-bright": "#3a393a",
+                        "on-secondary-container": "#00633f",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "primary-fixed-dim": "#ffb3b3",
+                        "tertiary-fixed": "#e4e2e4",
+                        "tertiary-container": "#929092",
+                        "on-background": "#e5e2e3",
+                        "outline-variant": "#5d3f3f",
+                        "on-primary": "#680015",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-highest": "#353436",
+                        "on-tertiary-fixed": "#1b1b1d",
+                        "inverse-primary": "#bf002f",
+                        "secondary-container": "#00e999",
+                        "surface-container": "#201f20",
+                        "tertiary": "#c8c6c8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "xl": "64px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "lg": "40px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-lg-mobile": ["Archivo Narrow"],
+                        "headline-lg": ["Archivo Narrow"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Archivo Narrow"],
+                        "stats-numeric": ["Archivo Narrow"],
+                        "headline-md": ["Archivo Narrow"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-lg": ["40px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "stats-numeric": ["32px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+        }
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .user-bubble {
+            background: linear-gradient(135deg, #FF2E4D 0%, #920022 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-bubble {
+            background-color: #1C1C1E;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar for clean chat interface */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md h-screen flex flex-col overflow-hidden">
+<!-- TopAppBar from JSON -->
+<header class="bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-white/10 flex justify-between items-center px-margin-mobile h-16 w-full flat no shadows">
+<div class="flex items-center gap-sm">
+<img alt="Athlete profile picture" class="w-10 h-10 rounded-full object-cover border border-white/10" data-alt="Close up professional portrait of a focused combat sports athlete in a dark gym environment with subtle neon red rim lighting. The style is gritty, high contrast, and hyper-realistic, reflecting intense physical preparation and discipline." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGMYqtXkJ3xmusf9GHA59uohNdyiFEkSzyauT2qiZYCn442mj8t5_l9nIjIZn_AOFjcjgVvWA-eypixs0qqvlXuiuqcdqFGNutTxb-j790WhXoWRjrhiQeyHplY-o1z74-72HUexVUFNFe9c1KhUif31D9iFo-qQKcgjuwchCseYoRdF6Qawe-W6dVKZOoFwedh7gN4MC2NBeRwR1rf0L8nkplyz0WR_PrEMvFWxngdwtKGUXutZo"/>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tighter">FightIQ</span>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform flex items-center justify-center p-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<!-- Main Chat Canvas -->
+<main class="flex-1 overflow-y-auto no-scrollbar pt-20 pb-32 px-margin-mobile md:px-margin-desktop flex flex-col gap-md max-w-3xl mx-auto w-full">
+<!-- Chat Header Area -->
+<div class="flex flex-col items-center justify-center py-md">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest border border-white/10 flex items-center justify-center mb-sm shadow-[0_0_15px_rgba(255,46,77,0.2)]">
+<span class="material-symbols-outlined text-primary text-[32px]">smart_toy</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Coach IQ</h1>
+<p class="font-body-md text-on-surface-variant text-sm">Always in your corner</p>
+</div>
+<!-- Date separator -->
+<div class="flex justify-center my-sm">
+<span class="font-label-bold text-label-bold text-on-surface-variant bg-surface-container-high px-sm py-xs rounded-full text-[10px] uppercase tracking-wider">Today, 2:45 PM</span>
+</div>
+<!-- Chat Messages -->
+<div class="flex flex-col gap-md">
+<!-- User Message -->
+<div class="flex justify-end w-full">
+<div class="user-bubble rounded-xl rounded-tr-sm p-sm max-w-[85%] md:max-w-[70%]">
+<p class="font-body-md text-on-primary">Why am I gassing out in round 4?</p>
+</div>
+</div>
+<!-- AI Message 1 -->
+<div class="flex justify-start w-full gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-white/10 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+</div>
+<div class="ai-bubble rounded-xl rounded-tl-sm p-sm max-w-[85%] md:max-w-[70%] flex flex-col gap-sm">
+<p class="font-body-md text-on-surface">Based on your last 5 sparring sessions, your strike volume in rounds 1-2 is <span class="text-error font-bold">25% higher</span> than your average, leading to early fatigue.</p>
+<!-- Embedded Data Card -->
+<div class="bg-surface-container-lowest border border-white/10 rounded-lg p-sm flex items-center gap-sm mt-xs">
+<div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+<!-- Simple SVG ring for output visualization -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<path class="text-error" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="75, 100" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<span class="absolute font-stats-numeric text-[12px] text-on-surface">R1</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface-variant">Avg Output R1-2</span>
+<span class="font-headline-md text-headline-md text-error">+25% Spike</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface">Try pacing your output in the first two rounds.</p>
+</div>
+</div>
+<!-- AI Message 2 -->
+<div class="flex justify-start w-full gap-sm">
+<div class="w-8 h-8 shrink-0"></div> <!-- Spacer for alignment -->
+<div class="ai-bubble rounded-xl rounded-tl-sm p-sm max-w-[85%] md:max-w-[70%]">
+<p class="font-body-md text-on-surface">I've updated your conditioning plan for tomorrow to include interval sprints.</p>
+<!-- Action Button within chat -->
+<button class="mt-sm w-full py-xs px-sm border border-[#22F2A1] rounded-lg font-label-bold text-label-bold text-[#22F2A1] flex items-center justify-center gap-xs hover:opacity-80 transition-opacity bg-[#22F2A1]/10">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+                        View Plan
+                    </button>
+</div>
+</div>
+<!-- Typing Indicator (Static for visual) -->
+<div class="flex justify-start w-full gap-sm opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-white/10 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+</div>
+<div class="ai-bubble rounded-xl rounded-tl-sm px-sm py-xs flex items-center gap-1 h-10">
+<div class="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-pulse delay-75"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-on-surface-variant animate-pulse delay-150"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area (Fixed above NavBar) -->
+<div class="fixed bottom-20 w-full z-40 bg-gradient-to-t from-background via-background to-transparent pt-lg pb-sm px-margin-mobile md:px-margin-desktop md:bottom-0 md:bg-background">
+<div class="max-w-3xl mx-auto w-full flex flex-col gap-sm">
+<!-- Quick Action Chips -->
+<div class="flex gap-sm overflow-x-auto no-scrollbar pb-1 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-white/10 bg-surface-container-low font-label-bold text-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+                    Create workout
+                </button>
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-white/10 bg-surface-container-low font-label-bold text-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+                    Analyze last session
+                </button>
+</div>
+<!-- Input Bar -->
+<div class="relative flex items-center w-full group">
+<input class="w-full bg-[#0A0A0B] border border-white/10 rounded-xl py-sm pl-sm pr-12 font-body-md text-on-surface focus:outline-none focus:border-[#22F2A1] focus:ring-1 focus:ring-[#22F2A1] transition-all placeholder:text-on-surface-variant/50" placeholder="Ask Coach IQ..." type="text"/>
+<button class="absolute right-sm text-primary hover:opacity-80 transition-opacity p-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- BottomNavBar from JSON (Mobile Only per semantics, hidden on md) -->
+<nav class="bg-surface/90 backdrop-blur-xl fixed bottom-0 w-full z-50 pb-safe border-t border-white/10 flex justify-around items-center h-20 w-full px-4 flat no shadows md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors w-16" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-bold text-label-bold text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors w-16" href="#">
+<span class="material-symbols-outlined mb-1">fitness_center</span>
+<span class="font-label-bold text-label-bold text-[10px]">Training</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center text-primary scale-90 transition-transform w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-bold text-label-bold text-[10px]">AI Coach</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors w-16" href="#">
+<span class="material-symbols-outlined mb-1">analytics</span>
+<span class="font-label-bold text-label-bold text-[10px]">Analytics</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FightIQ - Onboarding: Disciplines</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&amp;family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#3a393a",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed-dim": "#00e295",
+                        "surface-tint": "#ffb3b3",
+                        "on-secondary-container": "#00633f",
+                        "on-secondary": "#003822",
+                        "outline": "#ad8887",
+                        "on-primary-container": "#5b0011",
+                        "secondary-fixed": "#4fffb0",
+                        "surface-container-high": "#2a2a2b",
+                        "primary": "#ffb3b3",
+                        "on-surface": "#e5e2e3",
+                        "secondary": "#8affc0",
+                        "surface-variant": "#353436",
+                        "on-secondary-fixed-variant": "#005233",
+                        "on-primary-fixed-variant": "#920022",
+                        "background": "#131314",
+                        "primary-container": "#ff5261",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#e4e2e4",
+                        "tertiary-fixed-dim": "#c8c6c8",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313031",
+                        "on-surface-variant": "#e6bcbc",
+                        "on-secondary-fixed": "#002112",
+                        "outline-variant": "#5d3f3f",
+                        "surface-dim": "#131314",
+                        "on-error": "#690005",
+                        "secondary-container": "#00e999",
+                        "on-primary-fixed": "#400009",
+                        "inverse-primary": "#bf002f",
+                        "on-tertiary": "#303032",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e5e2e3",
+                        "on-primary": "#680015",
+                        "surface": "#131314",
+                        "tertiary-container": "#929092",
+                        "on-tertiary-fixed-variant": "#474649",
+                        "primary-fixed-dim": "#ffb3b3",
+                        "on-background": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-container": "#2a292c",
+                        "primary-fixed": "#ffdad9",
+                        "tertiary": "#c8c6c8",
+                        "surface-container-low": "#1c1b1c",
+                        "surface-container": "#201f20",
+                        "on-tertiary-fixed": "#1b1b1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "margin-desktop": "32px",
+                        "xs": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "headline-lg-mobile": ["Archivo Narrow"],
+                        "stats-numeric": ["Archivo Narrow"],
+                        "headline-lg": ["Archivo Narrow"],
+                        "headline-md": ["Archivo Narrow"],
+                        "display-xl": ["Archivo Narrow"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "stats-numeric": ["32px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["40px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-xl": ["72px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background-color: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .discipline-card.selected {
+            background-color: rgba(255, 179, 179, 0.15); /* primary with opacity */
+            border-color: #ffb3b3;
+            box-shadow: 0 0 15px rgba(255, 179, 179, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Note: TopAppBar suppressed because this is a linear transactional onboarding screen -->
+<main class="flex-grow flex flex-col px-margin-mobile md:px-margin-desktop py-lg max-w-4xl mx-auto w-full">
+<!-- Progress Indicator -->
+<div class="w-full flex items-center justify-between mb-xl">
+<div class="flex gap-xs w-full max-w-[200px] mx-auto md:mx-0">
+<div class="h-1 flex-1 bg-primary rounded-full shadow-[0_0_8px_rgba(255,179,179,0.5)]"></div>
+<div class="h-1 flex-1 bg-surface-container-high rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-high rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-high rounded-full"></div>
+</div>
+<button class="text-on-surface-variant font-label-bold text-label-bold hover:text-on-surface transition-colors uppercase ml-md hidden md:block" type="button">
+                Skip
+            </button>
+</div>
+<!-- Header -->
+<header class="mb-xl text-center md:text-left">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-sm">What are your disciplines?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Select all that apply to personalize your training data.</p>
+</header>
+<!-- Discipline Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-gutter mb-xl flex-grow content-start" id="discipline-grid">
+<!-- MMA -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">sports_mma</span>
+<span class="font-label-bold text-label-bold text-on-surface">MMA</span>
+</button>
+<!-- Boxing -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">sports_martial_arts</span>
+<span class="font-label-bold text-label-bold text-on-surface">Boxing</span>
+</button>
+<!-- Muay Thai -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">sports_kabaddi</span>
+<span class="font-label-bold text-label-bold text-on-surface">Muay Thai</span>
+</button>
+<!-- BJJ -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">front_hand</span>
+<span class="font-label-bold text-label-bold text-on-surface">BJJ</span>
+</button>
+<!-- Kickboxing -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">sports_gymnastics</span>
+<span class="font-label-bold text-label-bold text-on-surface">Kickboxing</span>
+</button>
+<!-- Wrestling -->
+<button aria-pressed="false" class="discipline-card glass-card rounded-xl p-md flex flex-col items-center justify-center gap-sm transition-all duration-200 hover:bg-surface-container-high group active:scale-95" type="button">
+<span class="material-symbols-outlined text-[48px] text-on-surface group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">accessibility_new</span>
+<span class="font-label-bold text-label-bold text-on-surface">Wrestling</span>
+</button>
+</div>
+<!-- Footer Actions -->
+<div class="mt-auto pb-safe md:pb-0 w-full sticky bottom-0 bg-background/90 backdrop-blur-md pt-md">
+<button class="w-full bg-[#FF2E4D] text-white font-label-bold text-label-bold py-md rounded-xl hover:opacity-80 transition-opacity flex justify-center items-center gap-xs shadow-[0_0_15px_rgba(255,46,77,0.3)]" type="button">
+                Continue
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full text-center mt-sm text-on-surface-variant font-label-bold text-label-bold py-sm md:hidden hover:text-on-surface" type="button">
+                Skip
+            </button>
+</div>
+</main>
+<!-- Note: BottomNavBar suppressed because this is a linear transactional onboarding screen -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.discipline-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('selected');
+                    
+                    // Toggle icon fill and color for visual feedback
+                    const icon = card.querySelector('.material-symbols-outlined');
+                    const isSelected = card.classList.contains('selected');
+                    
+                    card.setAttribute('aria-pressed', isSelected);
+                    
+                    if (isSelected) {
+                        icon.style.fontVariationSettings = "'FILL' 1";
+                        icon.classList.remove('text-on-surface');
+                        icon.classList.add('text-primary');
+                    } else {
+                        icon.style.fontVariationSettings = "'FILL' 0";
+                        icon.classList.add('text-on-surface');
+                        icon.classList.remove('text-primary');
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>
