@@ -29,7 +29,12 @@ export class WidgetBoundary extends Component<Props, State> {
           <Text className="text-white/50">
             {this.props.label ?? "This section"} couldn&apos;t load.
           </Text>
-          <Pressable onPress={() => this.setState({ hasError: false })} className="mt-2">
+          <Pressable
+            onPress={() => this.setState({ hasError: false })}
+            accessibilityRole="button"
+            accessibilityLabel="Retry"
+            className="mt-2"
+          >
             <Text className="text-brand text-xs font-bold uppercase">Retry</Text>
           </Pressable>
         </View>

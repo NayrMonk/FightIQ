@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import analytics, auth, dashboard, history, profile, programmes, sessions
+from app.routers import analytics, auth, coach, dashboard, history, profile, programmes, sessions
 
 app = FastAPI(title="FightIQ API", version="0.1.0")
 
@@ -20,6 +20,7 @@ app.include_router(sessions.router)
 app.include_router(history.router)
 app.include_router(analytics.router)
 app.include_router(dashboard.router)
+app.include_router(coach.router)
 
 
 @app.get("/health")

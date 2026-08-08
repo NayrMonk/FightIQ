@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./client";
 import type {
   AnalyticsSummary,
+  ChatMessage,
+  ChatResponse,
   CompleteSessionResponse,
   DashboardResponse,
   PersonalRecord,
@@ -108,5 +110,12 @@ export function usePersonalRecords() {
   return useQuery({
     queryKey: ["analytics", "personal-records"],
     queryFn: () => api.get<PersonalRecord[]>("/analytics/personal-records"),
+  });
+}
+
+export function useCoachChat() {
+  return useMutation({
+    mutationFn: (payload: { message: string; history: ChatMessage[] }) =>
+      api.post<ChatResponse>("/coach/chat", payload),
   });
 }

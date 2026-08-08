@@ -123,3 +123,12 @@ export interface CompleteSessionResponse {
   session: UserSession;
   new_personal_records: PersonalRecord[];
 }
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ChatResponse {
+  reply: string;
+}

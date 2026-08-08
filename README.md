@@ -67,5 +67,4 @@ Scan the QR code in Expo Go, or press `i`/`a` for iOS/Android simulator.
 
 ## Notes
 
-- No Docker — both apps run directly via local Python/Node tooling.
-- No AI coach in this phase; a future pass will add it (planned provider: Groq).
+
