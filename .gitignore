@@ -16,3 +16,7 @@ mobile/.env
 # OS
 .DS_Store
 Thumbs.db
+
+# Expo QR code
+expo-qr.png
+
