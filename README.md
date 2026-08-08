@@ -287,14 +287,11 @@ The backend test suite uses an **in-memory SQLite** database — no PostgreSQL n
 cd mobile
 npm test
 ```
-
-
-https://github.com/user-attachments/assets/c3913ffb-d64a-4e1f-acbf-2c7baa29b6d6
-
-
-
+Video 1:
 https://github.com/user-attachments/assets/6c019474-a59b-404d-bb2f-37c5798483fb
 
+Video 2:
+https://github.com/user-attachments/assets/c3913ffb-d64a-4e1f-acbf-2c7baa29b6d6
 
 ---
 
