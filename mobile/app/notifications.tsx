@@ -1,7 +1,9 @@
 import { Stack, router } from "expo-router";
-import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useMarkAllNotificationsRead, useNotifications } from "../src/api/hooks";
+import type { NotificationResponse } from "../src/types/api";
 
 interface NotificationItem {
   id: string;
@@ -14,60 +16,42 @@ interface NotificationItem {
   group: "Today" | "Earlier";
 }
 
-// ponytail: static mock list standing in for a backend feed. Swap for a `useNotifications()`
-// query hook (same shape) once a notifications endpoint exists.
-const MOCK_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: "1",
-    icon: "🧠",
-    iconColor: "text-mint",
-    title: "AI Coach",
-    body: "New recovery analysis ready based on your last sparring session.",
-    time: "10m ago",
-    read: false,
-    group: "Today",
-  },
-  {
-    id: "2",
-    icon: "🥋",
-    iconColor: "text-brand-container",
-    title: "Training Reminder",
-    body: "Boxing Fundamentals today at 5 PM. Don't forget your 16oz gloves.",
-    time: "2h ago",
-    read: false,
-    group: "Today",
-  },
-  {
-    id: "3",
-    icon: "🎖️",
-    iconColor: "text-mint",
-    title: "Achievement",
-    body: "12-Day Streak reached! Consistent grind pays off.",
-    time: "Yesterday",
-    read: true,
-    group: "Earlier",
-  },
-  {
-    id: "4",
-    icon: "✅",
-    iconColor: "text-brand-container",
-    title: "New Program",
-    body: "Muay Thai Power added to your weekly schedule.",
-    time: "Oct 12",
-    read: true,
-    group: "Earlier",
-  },
-  {
-    id: "5",
-    icon: "🔄",
-    iconColor: "text-white/60",
-    title: "System Update",
-    body: "FightIQ v2.4 installed. Enjoy improved round tracking.",
-    time: "Oct 10",
-    read: true,
-    group: "Earlier",
-  },
-];
+const TYPE_ICON: Record<string, { icon: string; iconColor: string }> = {
+  session_reminder: { icon: "⏰", iconColor: "text-brand-container" },
+  streak_risk: { icon: "🔥", iconColor: "text-mint" },
+  new_activity: { icon: "👥", iconColor: "text-brand-container" },
+};
+
+function formatTime(iso: string): string {
+  const date = new Date(iso);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+  if (isToday) {
+    const diffMin = Math.max(0, Math.round((now.getTime() - date.getTime()) / 60000));
+    if (diffMin < 1) return "Just now";
+    if (diffMin < 60) return `${diffMin}m ago`;
+    return `${Math.round(diffMin / 60)}h ago`;
+  }
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function toNotificationItem(n: NotificationResponse): NotificationItem {
+  const { icon, iconColor } = TYPE_ICON[n.type] ?? { icon: "🔔", iconColor: "text-white/60" };
+  const isToday = new Date(n.created_at).toDateString() === new Date().toDateString();
+  return {
+    id: String(n.id),
+    icon,
+    iconColor,
+    title: n.title,
+    body: n.body,
+    time: formatTime(n.created_at),
+    read: n.read_at !== null,
+    group: isToday ? "Today" : "Earlier",
+  };
+}
 
 function NotificationRow({ item }: { item: NotificationItem }) {
   return (
@@ -90,14 +74,12 @@ function NotificationRow({ item }: { item: NotificationItem }) {
 
 export default function NotificationsScreen() {
   const insets = useSafeAreaInsets();
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const { data } = useNotifications();
+  const markAllRead = useMarkAllNotificationsRead();
 
+  const notifications = (data ?? []).map(toNotificationItem);
   const today = notifications.filter((n) => n.group === "Today");
   const earlier = notifications.filter((n) => n.group === "Earlier");
-
-  function handleMarkAllRead() {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }
 
   return (
     <View className="flex-1 bg-background">
@@ -117,7 +99,7 @@ export default function NotificationsScreen() {
           </Pressable>
           <Text className="text-brand-container text-xl font-bold tracking-tight">Notifications</Text>
         </View>
-        <Pressable onPress={handleMarkAllRead} accessibilityRole="button" accessibilityLabel="Mark all as read">
+        <Pressable onPress={() => markAllRead.mutate()} accessibilityRole="button" accessibilityLabel="Mark all as read">
           <Text className="text-mint font-bold text-sm">Mark all read</Text>
         </Pressable>
       </View>

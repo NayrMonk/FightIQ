@@ -3,14 +3,30 @@ import { router } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useUpdateProfile } from "../../src/api/hooks";
 import { useOnboardingStore } from "../../src/stores/onboardingStore";
 
 export default function WelcomeSummaryScreen() {
   const disciplines = useOnboardingStore((s) => s.disciplines);
   const goal = useOnboardingStore((s) => s.goal);
   const experience = useOnboardingStore((s) => s.experience);
+  const updateProfile = useUpdateProfile();
 
   const disciplineLabel = disciplines.length ? disciplines.join(", ") : "Not set";
+
+  function saveOnboardingAndNavigate(destination: "/(tabs)" | "/(tabs)/programmes") {
+    updateProfile.mutate({
+      primary_discipline: disciplines.join(", ") || null,
+      experience_level: experience,
+      primary_goal: goal,
+      onboarding_completed_at: new Date().toISOString(),
+    });
+    if (destination === "/(tabs)") {
+      router.replace(destination);
+    } else {
+      router.push(destination);
+    }
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top", "bottom"]}>
@@ -67,7 +83,7 @@ export default function WelcomeSummaryScreen() {
 
         <View className="mt-auto gap-3">
           <Pressable
-            onPress={() => router.replace("/(tabs)")}
+            onPress={() => saveOnboardingAndNavigate("/(tabs)")}
             accessibilityRole="button"
             accessibilityLabel="Go to dashboard"
             className="bg-brand-container rounded-lg py-4 items-center flex-row justify-center gap-2 active:opacity-80"
@@ -76,7 +92,7 @@ export default function WelcomeSummaryScreen() {
             <Ionicons name="arrow-forward" size={18} color="#fff" />
           </Pressable>
           <Pressable
-            onPress={() => router.push("/(tabs)/programmes")}
+            onPress={() => saveOnboardingAndNavigate("/(tabs)/programmes")}
             accessibilityRole="button"
             accessibilityLabel="Explore training programs"
             className="border border-mint rounded-lg py-3.5 items-center active:opacity-80"

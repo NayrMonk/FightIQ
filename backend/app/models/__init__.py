@@ -9,10 +9,15 @@ from app.models.programme import (
     RoundExercise,
 )
 from app.models.session import UserSession, SessionResult, PersonalRecord
+from app.models.auth import RefreshToken, AuthToken
+from app.models.social import Follow, ActivityEvent, Challenge, ChallengeParticipant
+from app.models.notification import PushToken, Notification
 
 __all__ = [
     "User",
     "AthleteProfile",
+    "RefreshToken",
+    "AuthToken",
     "Programme",
     "ProgrammeWeek",
     "ScheduledSession",
@@ -23,4 +28,10 @@ __all__ = [
     "UserSession",
     "SessionResult",
     "PersonalRecord",
+    "Follow",
+    "ActivityEvent",
+    "Challenge",
+    "ChallengeParticipant",
+    "PushToken",
+    "Notification",
 ]

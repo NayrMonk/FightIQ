@@ -7,7 +7,8 @@ class Settings(BaseSettings):
     database_url: str = "postgresql://postgres:postgres@localhost:5432/fightiq"
     jwt_secret: str = "change-me-to-a-random-secret"
     jwt_algorithm: str = "HS256"
-    jwt_expire_minutes: int = 10080
+    jwt_expire_minutes: int = 30
+    refresh_token_expire_days: int = 30
 
     groq_api_key: str = ""
     groq_model: str = "llama-3.3-70b-versatile"

@@ -16,10 +16,24 @@ from app.models.programme import (
     SessionTemplate,
 )
 from app.models.session import SessionResult, UserSession
+from app.models.social import Follow
 from app.models.user import AthleteProfile, User
 
 DEMO_EMAIL = "athlete@test.com"
 DEMO_PASSWORD = "password123"
+COACH_EMAIL = "coach@test.com"
+COACH_PASSWORD = "password123"
+
+
+def _ensure_mutual_follow(db, user_a_id: int, user_b_id: int) -> None:
+    for follower_id, followee_id in [(user_a_id, user_b_id), (user_b_id, user_a_id)]:
+        exists = (
+            db.query(Follow)
+            .filter(Follow.follower_id == follower_id, Follow.followee_id == followee_id)
+            .first()
+        )
+        if not exists:
+            db.add(Follow(follower_id=follower_id, followee_id=followee_id))
 
 
 def seed():
@@ -29,11 +43,25 @@ def seed():
         existing = db.query(User).filter(User.email == DEMO_EMAIL).first()
         if existing:
             print(f"Demo user {DEMO_EMAIL} already exists, skipping seed.")
+            coach = db.query(User).filter(User.email == COACH_EMAIL).first()
+            if not coach:
+                coach = User(email=COACH_EMAIL, hashed_password=hash_password(COACH_PASSWORD), role="coach")
+                db.add(coach)
+                db.flush()
+                print(f"Added coach user {COACH_EMAIL} / {COACH_PASSWORD}")
+            _ensure_mutual_follow(db, existing.id, coach.id)
+            db.commit()
             return
 
-        user = User(email=DEMO_EMAIL, hashed_password=hash_password(DEMO_PASSWORD))
+        coach = db.query(User).filter(User.email == COACH_EMAIL).first()
+        if not coach:
+            coach = User(email=COACH_EMAIL, hashed_password=hash_password(COACH_PASSWORD), role="coach")
+            db.add(coach)
+
+        user = User(email=DEMO_EMAIL, hashed_password=hash_password(DEMO_PASSWORD), role="athlete")
         db.add(user)
         db.flush()
+        _ensure_mutual_follow(db, user.id, coach.id)
         db.add(
             AthleteProfile(
                 user_id=user.id,
@@ -227,6 +255,7 @@ def seed():
 
         db.commit()
         print(f"Seed complete. Demo login: {DEMO_EMAIL} / {DEMO_PASSWORD}")
+        print(f"Coach login: {COACH_EMAIL} / {COACH_PASSWORD}")
     finally:
         db.close()
 

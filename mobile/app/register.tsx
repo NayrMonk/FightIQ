@@ -26,8 +26,11 @@ export default function RegisterScreen() {
     setError(null);
     setLoading(true);
     try {
-      const res = await api.post<{ access_token: string }>("/auth/register", { email, password });
-      await login(res.access_token);
+      const res = await api.post<{ access_token: string; refresh_token: string }>("/auth/register", {
+        email,
+        password,
+      });
+      await login(res.access_token, res.refresh_token);
       router.replace("/");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Registration failed");

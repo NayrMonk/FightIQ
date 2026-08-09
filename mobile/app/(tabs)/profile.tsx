@@ -113,6 +113,36 @@ export default function ProfileScreen() {
       </WidgetBoundary>
 
       <Pressable
+        onPress={() => router.push("/social/feed")}
+        accessibilityRole="button"
+        accessibilityLabel="Open activity feed"
+        className="bg-surface border border-white/10 rounded-lg px-4 py-3 flex-row justify-between items-center mb-3 active:opacity-80"
+      >
+        <Text className="text-white font-semibold">Activity Feed</Text>
+        <Text className="text-white/40">›</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => router.push("/social/leaderboard")}
+        accessibilityRole="button"
+        accessibilityLabel="Open leaderboard"
+        className="bg-surface border border-white/10 rounded-lg px-4 py-3 flex-row justify-between items-center mb-3 active:opacity-80"
+      >
+        <Text className="text-white font-semibold">Leaderboard</Text>
+        <Text className="text-white/40">›</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => router.push("/social/challenges")}
+        accessibilityRole="button"
+        accessibilityLabel="Open challenges"
+        className="bg-surface border border-white/10 rounded-lg px-4 py-3 flex-row justify-between items-center mb-3 active:opacity-80"
+      >
+        <Text className="text-white font-semibold">Challenges</Text>
+        <Text className="text-white/40">›</Text>
+      </Pressable>
+
+      <Pressable
         onPress={() => router.push("/settings")}
         accessibilityRole="button"
         accessibilityLabel="Open settings"

@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.models  # noqa: F401 -- registers all models on Base.metadata
+from app.core.limiter import limiter
 from app.db.session import Base, get_db
 from app.main import app as fastapi_app
 from app.models.programme import Exercise, Programme, Round, RoundExercise, SessionTemplate
@@ -42,6 +43,7 @@ def db_session():
 
 @pytest.fixture()
 def client(db_session):
+    limiter.reset()  # ponytail: rate limiter storage is a module-level singleton, reset between tests
     with TestClient(fastapi_app) as c:
         yield c
 

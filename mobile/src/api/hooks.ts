@@ -2,11 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "./client";
 import type {
+  ActivityEvent,
   AnalyticsSummary,
+  Challenge,
+  ChallengeDetail,
   ChatMessage,
   ChatResponse,
   CompleteSessionResponse,
   DashboardResponse,
+  LeaderboardEntry,
+  NotificationResponse,
   PersonalRecord,
   Profile,
   ProgrammeDetail,
@@ -14,6 +19,7 @@ import type {
   SessionTemplateDetail,
   UserSession,
   UserSessionDetail,
+  UserSummary,
 } from "../types/api";
 
 export function useDashboard() {
@@ -117,5 +123,109 @@ export function useCoachChat() {
   return useMutation({
     mutationFn: (payload: { message: string; history: ChatMessage[] }) =>
       api.post<ChatResponse>("/coach/chat", payload),
+  });
+}
+
+export function useFollowers() {
+  return useQuery({ queryKey: ["social", "followers"], queryFn: () => api.get<UserSummary[]>("/social/followers") });
+}
+
+export function useFollowing() {
+  return useQuery({ queryKey: ["social", "following"], queryFn: () => api.get<UserSummary[]>("/social/following") });
+}
+
+function invalidateSocial(queryClient: ReturnType<typeof useQueryClient>) {
+  queryClient.invalidateQueries({ queryKey: ["social", "following"] });
+  queryClient.invalidateQueries({ queryKey: ["social", "followers"] });
+  queryClient.invalidateQueries({ queryKey: ["social", "feed"] });
+  queryClient.invalidateQueries({ queryKey: ["social", "leaderboard"] });
+}
+
+export function useFollowUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: number) => api.post<UserSummary>(`/social/follow/${userId}`),
+    onSuccess: () => invalidateSocial(queryClient),
+  });
+}
+
+export function useUnfollowUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: number) => api.delete<void>(`/social/follow/${userId}`),
+    onSuccess: () => invalidateSocial(queryClient),
+  });
+}
+
+export function useFeed(limit = 20, offset = 0) {
+  return useQuery({
+    queryKey: ["social", "feed", limit, offset],
+    queryFn: () => api.get<ActivityEvent[]>(`/social/feed?limit=${limit}&offset=${offset}`),
+  });
+}
+
+export function useLeaderboard(metric: "streak" | "sessions", scope: "global" | "following") {
+  return useQuery({
+    queryKey: ["social", "leaderboard", metric, scope],
+    queryFn: () => api.get<LeaderboardEntry[]>(`/social/leaderboard?metric=${metric}&scope=${scope}`),
+  });
+}
+
+export function useChallenges() {
+  return useQuery({ queryKey: ["social", "challenges"], queryFn: () => api.get<Challenge[]>("/social/challenges") });
+}
+
+export function useChallenge(id: number | undefined) {
+  return useQuery({
+    queryKey: ["social", "challenges", id],
+    queryFn: () => api.get<ChallengeDetail>(`/social/challenges/${id}`),
+    enabled: !!id,
+  });
+}
+
+export function useCreateChallenge() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: {
+      title: string;
+      description?: string | null;
+      metric: string;
+      target_value: number;
+      start_date: string;
+      end_date: string;
+    }) => api.post<Challenge>("/social/challenges", payload),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["social", "challenges"] }),
+  });
+}
+
+export function useNotifications() {
+  return useQuery({
+    queryKey: ["notifications"],
+    queryFn: () => api.get<NotificationResponse[]>("/notifications"),
+  });
+}
+
+export function useMarkAllNotificationsRead() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.post<void>("/notifications/mark-all-read"),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+  });
+}
+
+export function useRegisterPushToken() {
+  return useMutation({
+    mutationFn: (expo_push_token: string) => api.post<void>("/notifications/register-token", { expo_push_token }),
+  });
+}
+
+export function useJoinChallenge() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (challengeId: number) => api.post(`/social/challenges/${challengeId}/join`),
+    onSuccess: (_data, challengeId) => {
+      queryClient.invalidateQueries({ queryKey: ["social", "challenges"] });
+      queryClient.invalidateQueries({ queryKey: ["social", "challenges", challengeId] });
+    },
   });
 }

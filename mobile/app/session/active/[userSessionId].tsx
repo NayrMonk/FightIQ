@@ -5,7 +5,7 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
 import { useCompleteSession, useUserSessionDetail } from "../../../src/api/hooks";
-import { queuePendingCompletion } from "../../../src/lib/offlineQueue";
+import { enqueue } from "../../../src/lib/offlineQueue";
 import {
   playCountdownTick,
   playRestStartCue,
@@ -137,7 +137,7 @@ export default function ActiveSessionScreen() {
       router.replace(`/session/summary/${id}`);
     } catch {
       // Offline or request failed: persist locally and retry next time the app is foregrounded.
-      await queuePendingCompletion({ userSessionId: id, payload });
+      await enqueue({ userSessionId: id, payload });
       router.replace("/");
     } finally {
       setFinishing(false);

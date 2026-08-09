@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.core.deps import get_current_user
 from app.db.session import get_db
 from app.models.session import PersonalRecord, SessionResult, UserSession
+from app.models.social import ActivityEvent, Follow
 from app.models.user import User
 from app.schemas.session import (
     CompleteSessionRequest,
@@ -17,6 +18,7 @@ from app.schemas.session import (
     UserSessionDetailResponse,
     UserSessionResponse,
 )
+from app.services.push import notify_user
 from app.services.stats import get_current_streak_days
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
@@ -162,10 +164,44 @@ def complete_session(
         db.add(pr)
         new_records.append(pr)
 
+    db.add(
+        ActivityEvent(
+            user_id=current_user.id,
+            event_type="session_completed",
+            payload={
+                "discipline": user_session.session_template.discipline,
+                "duration_sec": payload.total_duration_sec,
+                "rounds_completed": payload.rounds_completed,
+            },
+        )
+    )
+    for pr in new_records:
+        db.add(
+            ActivityEvent(
+                user_id=current_user.id,
+                event_type="personal_record",
+                payload={"record_type": pr.record_type, "value": pr.value},
+            )
+        )
+
     db.commit()
     db.refresh(user_session)
     for pr in new_records:
         db.refresh(pr)
+
+    display_name = current_user.profile.display_name if current_user.profile else current_user.email
+    follower_ids = [
+        row[0] for row in db.query(Follow.follower_id).filter(Follow.followee_id == current_user.id).all()
+    ]
+    for follower_id in follower_ids:
+        notify_user(
+            db,
+            follower_id,
+            type="new_activity",
+            title=f"{display_name} completed a session",
+            body=f"{display_name} just finished {user_session.session_template.discipline} training.",
+            data={"user_id": current_user.id, "user_session_id": user_session.id},
+        )
 
     return CompleteSessionResponse(
         session=user_session,

@@ -1,3 +1,5 @@
+import hashlib
+import secrets
 from datetime import datetime, timedelta, timezone
 
 from jose import JWTError, jwt
@@ -28,3 +30,17 @@ def decode_access_token(token: str) -> str | None:
         return payload.get("sub")
     except JWTError:
         return None
+
+
+def create_refresh_token() -> str:
+    return secrets.token_urlsafe(32)
+
+
+def hash_token(raw: str) -> str:
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def as_aware_utc(dt: datetime) -> datetime:
+    """SQLite (used in tests) drops tzinfo on DateTime(timezone=True) columns even
+    though Postgres preserves it; normalize so expiry comparisons work on both."""
+    return dt if dt.tzinfo is not None else dt.replace(tzinfo=timezone.utc)

@@ -3,6 +3,8 @@ export interface Profile {
   weight_class: string | null;
   primary_discipline: string | null;
   experience_level: string | null;
+  primary_goal: string | null;
+  onboarding_completed_at: string | null;
   height_cm: number | null;
   weight_kg: number | null;
   avatar_url: string | null;
@@ -131,4 +133,62 @@ export interface ChatMessage {
 
 export interface ChatResponse {
   reply: string;
+}
+
+export interface Follow {
+  follower_id: number;
+  followee_id: number;
+  created_at: string;
+}
+
+export interface UserSummary {
+  id: number;
+  display_name: string | null;
+}
+
+export interface ActivityEvent {
+  id: number;
+  user: UserSummary;
+  event_type: "session_completed" | "personal_record";
+  payload: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface LeaderboardEntry {
+  user: UserSummary;
+  rank: number;
+  value: number;
+  metric: string;
+}
+
+export interface Challenge {
+  id: number;
+  title: string;
+  description: string | null;
+  metric: "total_sessions" | "total_rounds" | "streak_days";
+  target_value: number;
+  start_date: string;
+  end_date: string;
+  creator: UserSummary;
+  participant_count: number;
+}
+
+export interface ChallengeParticipantEntry {
+  user: UserSummary;
+  current_value: number;
+  completed_at: string | null;
+}
+
+export interface ChallengeDetail extends Challenge {
+  participants: ChallengeParticipantEntry[];
+}
+
+export interface NotificationResponse {
+  id: number;
+  type: "session_reminder" | "streak_risk" | "new_activity" | (string & {});
+  title: string;
+  body: string;
+  data: Record<string, unknown> | null;
+  read_at: string | null;
+  created_at: string;
 }
